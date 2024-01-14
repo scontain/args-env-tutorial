@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <unistd.h>
 
-extern char **__environ;
+// extern char **__environ;
+extern char **environ;
+
 
 int main (int argc, char **argv) {
     printf("argv:");
@@ -9,7 +12,7 @@ int main (int argc, char **argv) {
     }
     printf("\n");
 
-    char** envp = __environ;
+    char** envp = environ;
     printf("environ:\n");
     while (*envp != NULL) {
         printf("%s\n", *envp);
