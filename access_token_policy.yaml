@@ -1,0 +1,32 @@
+name: $NAMESPACE/access_token_policy
+version: 0.3.10
+predecessor: $ACCESS_TOKEN_POLICY_PREDECESSOR
+
+security:
+# require OTP to print access token
+  attestation:
+    one_time_password_shared_secret: $$SCONE::otp_shared_secret:base32nopad$$
+    mode: none
+
+services:
+   - name: print_access_token
+     command: print_access_token
+     environment:
+        SCONE_MODE: auto
+        ACCESS_TOKEN: $$SCONE::access_token$$
+     pwd: /work
+
+secrets:
+# define access TOKEN for a specific cluster
+  - name: access_token
+    kind: ascii
+    size: 32
+    export:
+      namespace: $NAMESPACE
+  - name: otp_shared_secret
+    kind: binary
+    size: 16
+    import:
+      session: $NAMESPACE/otp_policy
+      secret: otp_shared_secret
+

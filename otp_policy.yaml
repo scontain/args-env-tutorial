@@ -1,0 +1,29 @@
+name: $NAMESPACE/otp_policy
+version: "0.3.10"
+predecessor: $OTP_POLICY_PREDECESSOR
+
+security:
+# We disable attestation for now
+  attestation:
+    mode: none
+
+# Only creator can access this policy
+access_policy:
+  read:
+   - CREATOR
+  update:
+   - CREATOR
+  create_sessions:
+    - CREATOR
+
+services:
+# Note, no access control of print-otp-secret yet
+   - name: print-otp-secret
+     command: scone-print-arg-env $$SCONE::otp_shared_secret:base32nopad$$
+
+secrets:
+  - name: otp_shared_secret
+    kind: binary
+    size: 16
+    export:
+      - namespace: $NAMESPACE

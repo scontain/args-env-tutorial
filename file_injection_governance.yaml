@@ -1,0 +1,42 @@
+name: $NAMESPACE/governance
+version: 0.3.10
+predecessor: $GOVERNANCE_PREDECESSOR
+
+# Only creator can access this policy
+access_policy: $$SCONE::access_policy$$
+
+security: $$SCONE::security$$
+
+secrets:
+  - name: access_policy
+    kind: config-fragment
+    export:
+      namespace: $NAMESPACE
+    value:
+      # Only creator can access this policy
+      # and only creator can use this namespace
+      read:
+      - CREATOR
+      update:
+      - CREATOR
+      create_sessions:
+        - CREATOR
+# define access TOKEN for a specific cluster
+  - name: security
+    kind: config-fragment
+    export:
+      namespace: $NAMESPACE
+    value:
+      service_access_token: $$SCONE::access_token$$
+      attestation:
+        one_time_password_shared_secret: $$SCONE::otp_shared_secret$$
+        mode: none
+  - name: access_token
+    import:
+      session: ../access_token_policy
+      secret: access_token
+  - name: otp_shared_secret
+    import:
+      session: ../otp_policy
+      secret: otp_shared_secret
+  

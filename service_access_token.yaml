@@ -1,0 +1,29 @@
+name: $SESSION
+# Policies are versioned using semantic versioning. For this example,
+# we use version 0.3.10
+version: 0.3.10
+predecessor: $PREDECESSOR
+
+# the security section defines how to attest applications
+security:
+  service_access_token: $$SCONE::access_token$$
+# We disable attestation first since we might not have
+# access to SGX or a LAS, see
+#    https://sconedocs.github.io/CAS_session_lang_0_3/#disabling-attestation
+  attestation:
+    mode: none
+
+services:
+   - name: scone-print-arg-env
+     command: ./scone-print-arg-env arg1 arg2 arg3
+     environment:
+        SCONE_MODE: auto
+        env1: running
+        env2: in
+        env3: enclave
+     pwd: /
+
+secrets:
+  - name: access_token
+    kind: ascii
+    value: j765WyMWTKksiqWbBuuc

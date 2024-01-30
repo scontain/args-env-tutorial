@@ -1,0 +1,29 @@
+name: $ACCESS_TOKEN_SESSION
+# Policies are versioned using semantic versioning. For this example,
+# we use version 0.3.10
+version: 0.3.10
+predecessor: $ACCESS_TOKEN_SESSION_PREDECESSOR
+
+# the security section defines how to attest applications
+security:
+# We disable attestation first since we might not have
+# access to SGX or a LAS, see
+#    https://sconedocs.github.io/CAS_session_lang_0_3/#disabling-attestation
+  attestation:
+    mode: none
+
+services:
+   - name: print_access_token
+     command: print_access_token
+     environment:
+        SCONE_MODE: auto
+        ACCESS_TOKEN: $$SCONE::access_token$$
+     pwd: /work
+
+secrets:
+# define access TOKEN for a specific cluster
+  - name: access_token
+    kind: ascii
+    size: 32
+    export:
+      session: $SESSION

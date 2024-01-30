@@ -1,0 +1,32 @@
+name: $NAMESPACE/nested-namespace/access_token_policy
+version: 0.3.10
+predecessor: $NESTED_ACCESS_TOKEN_POLICY_PREDECESSOR
+
+security:
+# require OTP to print access token
+  service_access_token: $$SCONE::access_token$$
+  attestation:
+    one_time_password_shared_secret: $$SCONE::otp_shared_secret:base32nopad$$
+    mode: none
+
+services:
+   - name: print_access_token
+     command: print_access_token
+     environment:
+        SCONE_MODE: auto
+        ACCESS_TOKEN: $$SCONE::access_token$$
+     pwd: /work
+
+secrets:
+# define access TOKEN for a specific cluster
+  - name: access_token
+    import:
+      session: ../../access_token_policy # == $NAMESPACE/access_token_policy
+      secret: access_token
+  - name: otp_shared_secret
+    kind: binary
+    size: 16
+    import:
+      session: ../../otp_policy ## == $NAMESPACE/otp_policy
+      secret: otp_shared_secret
+

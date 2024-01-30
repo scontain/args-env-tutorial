@@ -1,0 +1,14 @@
+name: $NAMESPACE/nested-namespace
+version: "0.3.10"
+predecessor: $NESTED_NAMESPACE_PREDECESSOR
+
+# Only creator can access this policy
+# and only creator can use this namespace
+
+access_policy:
+  read:
+   - CREATOR
+  update:
+   - CREATOR
+  create_sessions:
+    - CREATOR

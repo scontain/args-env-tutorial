@@ -1,0 +1,25 @@
+# Name of the session - this must be unique!
+# The creation will fail in case session already exists
+name: $SESSION
+# Policies are versioned using semantic versioning. For this example,
+# we use version 0.3.10
+version: 0.3.10
+
+# the security section defines how to attest applications
+security:
+
+# We disable attestation first since we might not have
+# access to SGX or a LAS, see
+#    https://sconedocs.github.io/CAS_session_lang_0_3/#disabling-attestation
+  attestation:
+    mode: none
+
+services:
+   - name: scone-print-arg-env
+     command: ./scone-print-arg-env arg1 arg2 arg3
+     environment:
+        SCONE_MODE: auto
+        env1: running
+        env2: in
+        env3: enclave
+     pwd: /

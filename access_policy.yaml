@@ -1,0 +1,21 @@
+name: $NAMESPACE/access_policy
+version: 0.3.10
+predecessor: $ACCESS_POLICY_PREDECESSOR
+
+# Only creator can access this policy
+access_policy: $$SCONE::access_policy$$
+
+secrets:
+  - name: access_policy
+    kind: config-fragment
+    export:
+      namespace: $NAMESPACE
+    value:
+      # Only creator can access this policy
+      # and only creator can use this namespace
+      read:
+      - CREATOR
+      update:
+      - CREATOR
+      create_sessions:
+        - CREATOR

@@ -1,0 +1,29 @@
+name: $SESSION
+version: 0.3.10
+predecessor: $PREDECESSOR
+
+# the security section defines how to attest applications
+security:
+# We require that environment variable SCONE_SERVICE_ACCESS_TOKEN is set to 
+# the value of the SCONE secret access_token
+  service_access_token: $$SCONE::access_token$$
+# We disable attestation first since we might not have access to SGX or a LAS
+  attestation:
+    mode: none
+
+services:
+   - name: scone-print-arg-env
+     command: ./scone-print-arg-env arg1 arg2 arg3
+     environment:
+        SCONE_MODE: auto
+        env1: running
+        env2: in
+        env3: enclave
+     pwd: /
+
+secrets:
+# We import the access_toke from another session
+  - name: access_token
+    import:
+      session: $ACCESS_TOKEN_SESSION
+      secret: access_token
