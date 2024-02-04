@@ -1,5 +1,5 @@
-name: history_example
+name: $HISTORY_SESSION
 version: 0.3.10
 predecessor: null
 
-# session hash: 5eeefc81a4ead9fb26760725b59262d35b798e18e588ed8baacfb465eb851674
+# session hash: $HSESSION1
