@@ -14,6 +14,8 @@ function determine_sgx_device {
             fi
         fi
     fi
+    echo SGXDEVICE=$SGXDEVICE
+    echo MOUNT_SGXDEVICE=$MOUNT_SGXDEVICE
 }
 
 determine_sgx_device

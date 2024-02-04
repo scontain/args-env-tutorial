@@ -1,0 +1,15 @@
+
+# create a unique session name
+export ACCESS_TOKEN_SESSION="access_token_session_$RANDOM-$RANDOM-$RANDOM-$RANDOM"
+
+# first version, no predecessor so far:
+export ACCESS_TOKEN_SESSION_PREDECESSOR="~"
+
+# show the session
+export SCONE="\$SCONE"
+envsubst < access_token_session.yaml
+
+# create the session and key the session hash
+export ACCESS_TOKEN_SESSION_PREDECESSOR=$(scone session create --use-env access_token_session.yaml)
+
+

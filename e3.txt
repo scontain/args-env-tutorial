@@ -1,0 +1,15 @@
+
+# print session - translate environment variables
+envsubst < service_access_token.yaml
+
+# create session
+export PREDECESSOR=$(scone session create --use-env  service_access_token.yaml)
+
+# error: since we do not specify the SCONE_SERVICE_ACCESS_TOKEN
+unset SCONE_SERVICE_ACCESS_TOKEN
+SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
+
+# correct:
+export SCONE_SERVICE_ACCESS_TOKEN=j765WyMWTKksiqWbBuuc
+SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
+

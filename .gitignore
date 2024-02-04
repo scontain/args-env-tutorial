@@ -7,3 +7,4 @@ tmp.yaml
 scone-print-arg-env-x
 scone-print-arg-env-x
 malicious-print-arg-env
+docker-compose.yml

@@ -1,0 +1,25 @@
+
+# let us read the session back from CAS
+scone session read $SESSION
+
+# the policy was extended by a default access_policy
+# that defines who can read, update, and create nested
+# policies.
+# We see that the CREATOR - which is a public key
+# this public key is our public key that the SCONE
+# CLI has generated
+scone self show-certificate 
+
+# we cross-compile (again) our print-arg-env.c program
+scone-gcc print-arg-env.c -g -O3 -o scone-print-arg-env
+
+# we run now the program under control of CAS
+# we need to define the session and the service that we want to use
+SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
+
+# let us run and try to provide some external environment variables
+# and arguments for the program
+env1=we env2=cannot env3=overwrite env4=environment SCONE_CONFIG_ID=$SESSION/scone-print-arg-env /work/scone-print-arg-env variables
+
+# we see that these external environment variables and arguments
+# are now ignored

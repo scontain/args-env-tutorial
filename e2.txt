@@ -1,0 +1,16 @@
+export SCONE_CAS_ADDR=scone-cas.cf
+
+# let us try to attest this CAS instance
+scone cas attest $SCONE_CAS_ADDR 
+
+# the CAS instance runs in debug mode and the hardware has some issues
+# we can use --help to see what we can do about this
+scone cas attest --help
+
+# let us attest again, this time we tolerate some of the detected issues
+scone cas attest $SCONE_CAS_ADDR --only_for_testing-debug --only_for_testing-ignore-signer --only_for_testing-trust-any --accept-configuration-needed --accept-sw-hardening-needed --accept-group-out-of-date
+
+# let us look at the list of trusted CAS instances
+scone cas list
+
+

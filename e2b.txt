@@ -1,0 +1,20 @@
+#first check the flags for generating a session, i.e., a SCONE CAS policy
+scone session create --help
+
+# create a random session name - to avoid conflicts with others
+export SESSION=secure-arguments-example-sim-mode-$RANDOM-$RANDOM
+echo Session name is $SESSION
+
+# show session
+cat session.yaml
+
+# The following fails since „variable $SESSION is not defined“ 
+scone session create session.yaml
+
+# Create the session - this will return a session hash
+export PREDECESSOR=$(scone session create --use-env session.yaml)
+
+echo Created Session $SESSION: The Session Hash is $PREDECESSOR
+
+# Note that creating this session a 2nd time will fail
+scone session create --use-env session.yaml

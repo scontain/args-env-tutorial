@@ -1,0 +1,16 @@
+# first version of OTP Policy
+export OTP_POLICY_PREDECESSOR="~"
+
+# create policy $NAMESPACE/otp_policy
+export OTP_POLICY_PREDECESSOR=$(scone session create --use-env otp_policy.yaml)
+
+echo The SESSION HASH of $NAMESPACE/otp_policy is $OTP_POLICY_PREDECESSOR
+
+# read the session
+scone session read $NAMESPACE/otp_policy
+
+# print the OTP Secret
+# this is not yet very secure
+unset SCONE_SERVICE_ACCESS_TOKEN
+SCONE_CONFIG_ID=$NAMESPACE/otp_policy/print-otp-secret /work/scone-print-arg-env
+

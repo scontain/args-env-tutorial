@@ -1,0 +1,17 @@
+# compile code as confidential program
+scone-gcc print-access-token.c  -o print-access-token
+
+# incorrect: uses local variable
+export ACCESS_TOKEN=22
+export SCONE_SERVICE_ACCESS_TOKEN=$(./print-access-token)
+
+# incorrect: CAS does not know secret
+export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$ACCESS_TOKEN_SESSION/print_access_token ./print-access-token)
+
+# correct:
+unset SCONE_SERVICE_ACCESS_TOKEN
+export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$ACCESS_TOKEN_SESSION/print_access_token ./print-access-token)
+
+# print the SCONE_SERVICE_ACCESS_TOKEN
+echo SCONE_SERVICE_ACCESS_TOKEN=$SCONE_SERVICE_ACCESS_TOKEN
+

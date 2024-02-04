@@ -1,0 +1,14 @@
+# determine IP address of host.docker.internal
+cat /etc/hosts
+
+# store in LIP
+export LIP=
+
+
+# extend /etc/hosts
+
+echo "$LIP las" >> /etc/hosts 
+
+
+cat /etc/hosts
+

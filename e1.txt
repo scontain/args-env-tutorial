@@ -1,0 +1,19 @@
+git clone https://github.com/scontain/args-env-tutorial.git
+
+cd args-env-tutorial/
+
+gcc print-arg-env.c -g -O3 -o print-arg-env
+
+ENV2=World ENV1=! ./print-arg-env Hello
+
+source determine_sgx_device.sh
+
+docker run $MOUNT_SGXDEVICE -w=/work  --network=host --add-host=host.docker.internal:host-gateway --rm -it -v `pwd`:/work registry.scontain.com/sconecuratedimages/crosscompilers bash
+
+# in the container compile the program:
+scone-gcc print-arg-env.c -g -O3 -o scone-print-arg-env
+
+export MRENCLAVE=`SCONE_HASH=1 ./scone-print-arg-env`
+echo MRENCLAVE of scone-print-arg-env is $MRENCLAVE
+
+ENV2=World ENV1=! ENV2="Args and Environment Variables are not protected" ./scone-print-arg-env Hello

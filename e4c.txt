@@ -1,0 +1,23 @@
+# define ACCESS_TOKEN_POLICY in namespace
+# and export to this namespace
+export ACCESS_TOKEN_POLICY_PREDECESSOR="~"
+export ACCESS_TOKEN_POLICY_PREDECESSOR=$(scone session create --use-env access_token_policy.yaml)
+
+echo The SESSION HASH of $NAMESPACE/access_token_policy is $ACCESS_TOKEN_POLICY_PREDECESSOR
+
+# read the session back
+scone session read $NAMESPACE/access_token_policy
+
+# first, try with an incorrect OTP
+# this fails - with a very high likelihood
+export OTP=123456
+SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} /work/print-access-token
+
+# we need to read the otp
+read -p "Type OTP: " OTP
+
+# try again to retrieve the SERVICE_ACCESS_TOKEN
+export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} /work/print-access-token)
+
+echo $SCONE_SERVICE_ACCESS_TOKEN
+

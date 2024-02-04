@@ -1,0 +1,33 @@
+source determine_sgx_device.sh
+
+export LAS=registry.scontain.com/sconecuratedimages/services:las
+
+cat > docker-compose.yml <<EOF
+version: '3.2'
+services:
+    las:
+        image: $LAS
+        devices:
+          - "$SGXDEVICE:$SGXDEVICE"
+        restart: on-failure
+        ports:
+          - target: 18766
+            published: 18766
+            protocol: tcp
+            mode: host
+EOF
+
+cat docker-compose.yml 
+
+docker-compose up -d las
+
+
+# check status of LAS
+
+docker-compose up -d las
+
+
+# stop LAS
+
+docker-compose stop
+

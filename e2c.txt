@@ -1,0 +1,17 @@
+export HISTORY_SESSION=history-example-$RANDOM-$RANDOM
+echo HISTORY_SESSION=$HISTORY_SESSION
+cat history_example_1.yaml
+envsubst <history_example_1.yaml
+
+export HSESSION1=$(scone session create --use-env history_example_1.yaml)
+echo Session hash of the first version of $HISTORY_SESSION is $HSESSION1
+envsubst <history_example_1.yaml
+
+envsubst <history_example_2.yaml
+export HSESSION2=$(scone session create --use-env history_example_2.yaml)
+echo Session hash of the second version of $HISTORY_SESSION is $HSESSION2
+
+envsubst <history_example_3.yaml
+export HSESSION3=$(scone session create --use-env history_example_3.yaml)
+echo Session hash of the third version of $HISTORY_SESSION is $HSESSION3
+

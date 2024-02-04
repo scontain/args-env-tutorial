@@ -1,0 +1,24 @@
+
+# compile progrma:
+scone-gcc /work/malicious-print-arg-env.c -g -O3 -o /work/malicious-print-arg-env
+
+export MRENCLAVE=`SCONE_HASH=1 /work/scone-print-arg-env`
+echo MRENCLAVE of scone-print-arg-env is $MRENCLAVE
+
+export MALICIOUS_MRENCLAVE=`SCONE_HASH=1 /work/malicious-print-arg-env`
+echo MALICIOUS_MRENCLAVE of malicious-print-arg-env is $MALICIOUS_MRENCLAVE
+
+ENV2=World ENV1=! /work/scone-print-arg-env Hello
+ENV2=World ENV1=! /work/malicious-print-arg-env Hello
+
+# read current OTP
+read -p "Type OTP: " OTP
+
+SCONE_CONFIG_ID=$NAMESPACE/host_arguments_policy/scone-print-arg-env@$OTP /work/scone-print-arg-env first last 1234567
+
+
+# read current OTP
+read -p "Type OTP: " OTP
+
+# run malicious version - gets also access to the keys!!
+SCONE_CONFIG_ID=$NAMESPACE/host_arguments_policy/scone-print-arg-env@$OTP /work/malicious-print-arg-env first last 1234567

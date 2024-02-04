@@ -1,0 +1,13 @@
+# define nested namespace
+export NESTED_NAMESPACE_PREDECESSOR="~"                                                              
+export NESTED_NAMESPACE_PREDECESSOR=$(scone session create --use-env nested_namespace.yaml)
+
+# define a double-nested policy
+export NESTED_ACCESS_TOKEN_POLICY_PREDECESSOR="~"
+export NESTED_ACCESS_TOKEN_POLICY_PREDECESSOR=$(scone session create --use-env nested_access_token_policy.yaml)
+
+read -p "Type OTP: " OTP
+
+# print access token
+SCONE_CONFIG_ID=$NAMESPACE/nested-namespace/access_token_policy/print_access_token@${OTP} /work/print-access-token
+
