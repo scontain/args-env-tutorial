@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app.kubernetes.io/instance: args-env-tutorial
+    app.kubernetes.io/name: args-env
+  name: args-env-tutorial
+  namespace: default
+spec:
+  containers:
+  - command: ["/bin/bash"]
+    args: ["-c", "sleep 20000"]
+    env:
+    - name: SCONE_CAS_ADDR
+      value: cas.default
+    - name: SCONE_LAS_ADDR
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.hostIP
+    - name: SCONE_LOG
+      value: debug
+    - name: SCONE_VERSION
+      value: "5.8.0"
+    - name: SCONE_EDMM_MODE
+      value: auto
+    image: registry.scontain.com/scone.cloud/crosscompilers:5.8.0
+    imagePullPolicy: Always
+    name: cli
+    resources:
+      limits:
+        sgx.intel.com/enclave: "1"
+      requests:
+        sgx.intel.com/enclave: "1"
+    securityContext: {}
+  imagePullSecrets:
+  - name: sconeapps

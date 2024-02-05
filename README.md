@@ -95,7 +95,7 @@ scone session create session.yaml
 We can now execute the program as follows:
 
 ```bash
-SCONE_CONFIG_ID=$SESSION/scone-print-arg-env /work/scone-print-arg-env
+SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
 ```
 
 ## OTP Definitions
@@ -125,7 +125,7 @@ export OTP_POLICY_PREDECESSOR=$(scone session create --use-env otp_policy.yaml)
 echo The SESSION HASH of $NAMESPACE/otp_policy is $OTP_POLICY_PREDECESSOR
 scone session read $NAMESPACE/otp_policy
 unset SCONE_SERVICE_ACCESS_TOKEN
-SCONE_CONFIG_ID=$NAMESPACE/otp_policy/print-otp-secret /work/scone-print-arg-env
+SCONE_CONFIG_ID=$NAMESPACE/otp_policy/print-otp-secret ./scone-print-arg-env
 ```
 
 ### Create Access Token for Namespace
@@ -137,9 +137,9 @@ export ACCESS_TOKEN_POLICY_PREDECESSOR=$(scone session create --use-env access_t
 echo The SESSION HASH of $NAMESPACE/access_token_policy is $ACCESS_TOKEN_POLICY_PREDECESSOR
 scone session read $NAMESPACE/access_token_policy
 export OTP=12345
-SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} /work/print-access-token
+SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} ./print-access-token
 export OTP= # provide current OTP
-export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} /work/print-access-token)
+export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} ./print-access-token)
 echo $SCONE_SERVICE_ACCESS_TOKEN
 ```
 
@@ -163,7 +163,7 @@ export NESTED_ACCESS_TOKEN_POLICY_PREDECESSOR=$(scone session create --use-env n
 echo The SESSION HASH of $NAMESPACE/nested-namespace/access_token_policy is $NESTED_ACCESS_TOKEN_POLICY_PREDECESSOR
 scone session read $NAMESPACE/nested-namespace/access_token_policy
 export OTP= # provide current OTP
-SCONE_CONFIG_ID=$NAMESPACE/nested-namespace/access_token_policy/print_access_token@${OTP} /work/print-access-token
+SCONE_CONFIG_ID=$NAMESPACE/nested-namespace/access_token_policy/print_access_token@${OTP} ./print-access-token
 ```
 
 ### Access and Security Policies
@@ -183,5 +183,5 @@ export HOST_ARGUMENTS_POLICY_PREDECESSOR=$(scone session create --use-env host_a
 echo The SESSION HASH of $NAMESPACE/host_arguments_policy is $HOST_ARGUMENTS_POLICY_PREDECESSOR
 scone session read $NAMESPACE/host_arguments_policy
 export OTP=
-SCONE_CONFIG_ID=$NAMESPACE/host_arguments_policy/scone-print-arg-env@$OTP /work/scone-print-arg-env first last 1234567
+SCONE_CONFIG_ID=$NAMESPACE/host_arguments_policy/scone-print-arg-env@$OTP ./scone-print-arg-env first last 1234567
 ```

@@ -1,0 +1,14 @@
+
+# We define a unique namespace
+export NAMESPACE="otp-example-$RANDOM-$RANDOM-$RANDOM-$RANDOM"
+
+# We create the namespace policy
+export NAMESPACE_PREDECESSOR="~"
+export NAMESPACE_PREDECESSOR=$(scone session create --use-env namespace.yaml)
+
+echo NAMESPACE=$NAMESPACE
+echo The SESSION HASH of $NAMESPACE  is $NAMESPACE_PREDECESSOR
+
+# Let's read the session back
+scone session read $NAMESPACE
+

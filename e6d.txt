@@ -1,3 +1,5 @@
+# The following only execute if you do not have access to a K8s cluster
+
 # determine IP address of host.docker.internal
 cat /etc/hosts
 

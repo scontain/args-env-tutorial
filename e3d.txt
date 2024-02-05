@@ -8,15 +8,15 @@ echo The session hash of session $SESSION is $PREDECESSOR
 scone session read $SESSION
 
 # Try to execute with the SERVICE_ACCESS_TOKEN enabled
-SCONE_CONFIG_ID=$SESSION/scone-print-arg-env /work/scone-print-arg-env
+SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
 
 # check that we indeed need the SERVICE_ACCESS_TOKEN
 unset SCONE_SERVICE_ACCESS_TOKEN
-SCONE_CONFIG_ID=$SESSION/scone-print-arg-env /work/scone-print-arg-env
+SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
 
 # ok, restore the token
 export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$ACCESS_TOKEN_SESSION/print_access_token ./print-access-token)
 
 # ok, now this should work again
-SCONE_CONFIG_ID=$SESSION/scone-print-arg-env /work/scone-print-arg-env
+SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
 

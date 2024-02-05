@@ -11,13 +11,13 @@ scone session read $NAMESPACE/access_token_policy
 # first, try with an incorrect OTP
 # this fails - with a very high likelihood
 export OTP=123456
-SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} /work/print-access-token
+SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} ./print-access-token
 
 # we need to read the otp
 read -p "Type OTP: " OTP
 
 # try again to retrieve the SERVICE_ACCESS_TOKEN
-export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} /work/print-access-token)
+export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} ./print-access-token)
 
 echo $SCONE_SERVICE_ACCESS_TOKEN
 

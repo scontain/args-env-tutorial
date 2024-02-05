@@ -1,0 +1,22 @@
+# create signer key
+
+# we need openssl
+apk add openssl
+
+# create a key of the right format
+
+openssl genrsa -3 3072 > identity.pem
+
+# sign binary
+
+export ISVPRODID=22
+export ISPSVN=2
+
+scone-signer sign --key=identity.pem --isvprodid=$ISVPRODID --isvsvn=$ISPSVN --production --stack=4M  --heap=100M scone-print-arg-env
+
+# show info 
+
+scone-signer info --yaml scone-print-arg-env
+
+# extract MrSigner:
+export MRSIGNER=

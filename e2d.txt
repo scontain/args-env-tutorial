@@ -19,7 +19,7 @@ SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
 
 # let us run and try to provide some external environment variables
 # and arguments for the program
-env1=we env2=cannot env3=overwrite env4=environment SCONE_CONFIG_ID=$SESSION/scone-print-arg-env /work/scone-print-arg-env variables
+env1=we env2=cannot env3=overwrite env4=environment SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env variables
 
 # we see that these external environment variables and arguments
 # are now ignored

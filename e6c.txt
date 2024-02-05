@@ -1,3 +1,5 @@
+# The following only execute if you do not have access to a K8s cluster
+
 source determine_sgx_device.sh
 
 export LAS=registry.scontain.com/sconecuratedimages/services:las

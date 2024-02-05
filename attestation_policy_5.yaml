@@ -8,6 +8,7 @@ access_policy: $$SCONE::access_policy$$
 # Use central security policy
 security:
     service_access_token: $$SCONE::access_token$$
+    singleton_enclaves: true
     attestation:
       tolerate: ["debug-mode", "outdated-tcb", "insecure-configuration", "hyperthreading", "insecure-igpu", "software-hardening-needed", "aepic-leak"]
       # We ignore all security advisories for now:
@@ -21,6 +22,10 @@ services:
      attestation:
       - mrenclave:
         - $MRENCLAVE
+        signer:
+          mrsigner: $MRSIGNER
+          isvprodid: $ISVPRODID
+          isvsvn: $ISPSVN
      environment:
         SCONE_MODE: auto
         CONF_ACCESS_TOKEN: $$SCONE::access_token$$

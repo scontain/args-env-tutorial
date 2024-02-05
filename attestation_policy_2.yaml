@@ -9,7 +9,7 @@ access_policy: $$SCONE::access_policy$$
 security:
     service_access_token: $$SCONE::access_token$$
     attestation:
-      tolerate: [debug-mode, hyperthreading]
+      tolerate: [debug-mode]
       one_time_password_shared_secret: $$SCONE::otp_shared_secret:base32nopad$$
       mode: hardware
 
