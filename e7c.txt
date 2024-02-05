@@ -1,5 +1,7 @@
 # tolerate all vulnerabilities
-export ATTESTATION_POLICY_PREDECESSOR=$(scone session create --use-env attestation_policy_5.yaml)
+SCONE="\$SCONE" envsubst < attestation_policy_5.yaml > ap.yaml
+export ATTESTATION_POLICY_PREDECESSOR=$(scone session create ap.yaml)
+
 scone session read $NAMESPACE/attestation_policy
 
 # read current OTP
@@ -8,8 +10,25 @@ read -p "Type OTP: " OTP
 # run with attestation
 SCONE_CONFIG_ID=$NAMESPACE/attestation_policy/scone-print-arg-env@$OTP ./scone-print-arg-env first last 1234567
 
-# Attestation succeeds
+# Attestation fails!
+#   Caused by: None of the required enclave properties are met by the enclave
+#    Caused by: Not all of the required enclave properties are met by the enclave
+#    Caused by: None of the required enclave properties are met by the enclave
+#    Caused by: Unexpected enclave measurement (MRENCLAVE, 37c8cbdab0673d4586983336f873fe44daa8ab52234367661d209bc21028a55a) - Expected 56f004a384620b35b9c949e1be1504369edc8838bdd63e257e78a8924c215372
+#
+# Note: Connecting to CAS at cas.default (port 18765) using service ID otp-example-32117-19335-13093-23347/attestation_policy/scone-print-arg-env@592262
 
+# Signing changes MRENCLAVE
+
+export MRENCLAVE=$(SCONE_HASH=1 ./scone-print-arg-env)
+SCONE="\$SCONE" envsubst < attestation_policy_5.yaml > ap.yaml
+export ATTESTATION_POLICY_PREDECESSOR=$(scone session create ap.yaml)
+
+# read current OTP
+read -p "Type OTP: " OTP
+
+# run with attestation
+SCONE_CONFIG_ID=$NAMESPACE/attestation_policy/scone-print-arg-env@$OTP ./scone-print-arg-env first last 1234567
 
 
 

@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
   - command: ["/bin/bash"]
-    args: ["-c", "sleep 20000"]
+    args: ["-c", "sleep 2000000"]
     env:
     - name: SCONE_CAS_ADDR
       value: cas.default

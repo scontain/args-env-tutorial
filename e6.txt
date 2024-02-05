@@ -1,5 +1,5 @@
 
-# compile progrma:
+# compile program:
 scone-gcc malicious-print-arg-env.c -g -O3 -o ./malicious-print-arg-env
 
 export MRENCLAVE=`SCONE_HASH=1 ./scone-print-arg-env`

@@ -10,7 +10,7 @@ security:
     service_access_token: $$SCONE::access_token$$
     singleton_enclaves: true
     attestation:
-      tolerate: ["debug-mode", "outdated-tcb", "insecure-configuration", "hyperthreading", "insecure-igpu", "software-hardening-needed", "aepic-leak"]
+      tolerate: ["outdated-tcb", "insecure-configuration", "hyperthreading", "insecure-igpu", "software-hardening-needed", "aepic-leak"]
       # We ignore all security advisories for now:
       ignore_advisories: "*"
       one_time_password_shared_secret: $$SCONE::otp_shared_secret:base32nopad$$
@@ -21,11 +21,11 @@ services:
      command: ./scone-print-arg-env start @@1 @@2 @@3 end
      attestation:
       - mrenclave:
-        - $MRENCLAVE
+          - $MRENCLAVE
         signer:
           mrsigner: $MRSIGNER
           isvprodid: $ISVPRODID
-          isvsvn: $ISPSVN
+          isvsvn: $ISVSVN
      environment:
         SCONE_MODE: auto
         CONF_ACCESS_TOKEN: $$SCONE::access_token$$

@@ -1,0 +1,26 @@
+# install standard util like find utility
+apk add findutils
+
+# get some info
+find --help
+
+# check if it is dynamically lined
+ldd $(which find)
+
+# copy it
+cp $(which find) scone_find
+
+# check that it is not sconified yet
+SCONE_HASH=1 ./scone_find --help
+
+# sconify it and sign for production
+scone-signer sign --sconify scone_find --env --production --dlopen=0 --mprotect=1 --fork=0 --syslibs=1 --heap=1G --stack=4M  --key identity.pem 
+
+# check that it is sconified yet
+SCONE_HASH=1 ./scone_find --help
+
+# print some info to indicate it is indeed running inside of enclave
+SCONE_VERSION=1  ./scone_find --help
+
+# of course, you could get info from scone-signer 
+scone-signer info --yaml scone_find

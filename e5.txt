@@ -1,10 +1,73 @@
-# create acces poliy
-export ACCESS_POLICY_PREDECESSOR="~"
-export ACCESS_POLICY_PREDECESSOR=$(scone session create --use-env access_policy.yaml)
+# run next steps in container in a Kubernetes cluster with a local
+# LAS and CAS already installed
 
-echo The SESSION HASH of $NAMESPACE/access_policy is $ACCESS_TOKEN_POLICY_PREDECESSOR
+# show the K8s manifest
+cat pod_manifest.yaml 
 
-# read back session
-scone session read $NAMESPACE/access_policy
+# create the pod
+kubectl apply -f pod_manifest.yaml 
+kubectl get pods
 
+# execute the commands inside of the container
+kubectl exec -it args-env-tutorial    -- bash
+
+# run in a tmux to keep the environment variables
+# even if we are getting disconnected.
+apk add tmux
+
+# you can connect and reconnect with the same command
+tmux new -A -s tutorial /bin/bash
+
+# clone the repo
+
+apk add git
+cd /
+mkdir -p /work
+cd /work
+git clone https://github.com/scontain/args-env-tutorial.git
+cd args-env-tutorial/
+git pull
+
+# reduce log level
+export SCONE_LOG=warning
+export SCONE_MODE=hw
+unset SCONE_VERSION
+
+# attest CAS
+scone cas attest $SCONE_CAS_ADDR --only_for_testing-debug --only_for_testing-ignore-signer --only_for_testing-trust-any --accept-configuration-needed --accept-sw-hardening-needed --accept-group-out-of-date
+scone cas list
+
+# recompile binaries
+
+scone-gcc print-arg-env.c -g -O3 -o scone-print-arg-env
+scone-gcc print-access-token.c  -o print-access-token
+
+# re-execute some commands from e4*.txt
+
+export NAMESPACE="otp-example-$RANDOM-$RANDOM-$RANDOM-$RANDOM"
+
+# We create the namespace policy
+export NAMESPACE_PREDECESSOR="~"
+export NAMESPACE_PREDECESSOR=$(scone session create --use-env namespace.yaml)
+
+# first version of OTP Policy
+export OTP_POLICY_PREDECESSOR="~"
+
+# create policy $NAMESPACE/otp_policy
+export OTP_POLICY_PREDECESSOR=$(scone session create --use-env otp_policy.yaml)
+
+# print the OTP and set up the OTP 
+unset SCONE_SERVICE_ACCESS_TOKEN
+SCONE_CONFIG_ID=$NAMESPACE/otp_policy/print-otp-secret ./scone-print-arg-env
+
+# define ACCESS_TOKEN_POLICY in namespace
+# and export to this namespace
+export ACCESS_TOKEN_POLICY_PREDECESSOR="~"
+export ACCESS_TOKEN_POLICY_PREDECESSOR=$(scone session create --use-env access_token_policy.yaml)
+
+# we need to read the otp
+read -p "Type OTP: " OTP
+
+# try again to retrieve the SERVICE_ACCESS_TOKEN
+export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} ./print-access-token)
 

@@ -1,0 +1,11 @@
+# create access poliy
+export ACCESS_POLICY_PREDECESSOR="~"
+export ACCESS_POLICY_PREDECESSOR=$(scone session create --use-env access_policy.yaml)
+envsubst < access_policy.yaml
+
+echo The SESSION HASH of $NAMESPACE/access_policy is $ACCESS_TOKEN_POLICY_PREDECESSOR
+
+# read back session
+scone session read $NAMESPACE/access_policy
+
+# we show in the next section on how to use the access_policy

@@ -1,4 +1,4 @@
-# The following only execute if you do not have access to a K8s cluster
+# execute the following only if you do not have access to a K8s cluster
 
 source determine_sgx_device.sh
 
