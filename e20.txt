@@ -1,0 +1,54 @@
+# create program that writes to an encrypted volume
+
+gcc fprint-arg-env.c  -o fprint-arg-env
+export FPRINT_MRENCLAVE=$(SCONE_HASH=1 ./fprint-arg-env)
+
+gcc print_file.c  -o print_file
+export PRINT_FILE_MRENCLAVE=$(SCONE_HASH=1 ./print_file)
+
+
+export FPRINT_POLICY_PREDECESSOR="~"
+export FPRINT_POLICY_PREDECESSOR=$(scone session create fprint_policy.yaml)
+
+scone session read $NAMESPACE/fprint_policy
+
+
+# ensure the output directory exists
+mkdir -p /volume
+
+# run without policy
+./fprint-arg-env host-arg1 host-arg2 host-arg3
+
+# move out of the way
+mv /volume /vol-no-policy
+
+# ensure the output directory exists
+mkdir -p /volume
+
+# run with attestation
+SCONE_CONFIG_ID=$NAMESPACE/fprint_policy/fprint-arg-env ./fprint-arg-env host-arg1 host-arg2 host-arg3
+SCONE_CONFIG_ID=$NAMESPACE/fprint_policy/print_file ./print_file 
+
+# take snapshot
+cp -r /volume /vol-step1
+
+# run 2nd time with attestation
+SCONE_CONFIG_ID=$NAMESPACE/fprint_policy/fprint-arg-env ./fprint-arg-env new-arg1 new-arg2 new-arg3
+SCONE_CONFIG_ID=$NAMESPACE/fprint_policy/print_file ./print_file 
+
+# rollback
+mv /volume /vol-step2
+mv  /vol-step1 /volume
+
+
+# try to read - should fail
+SCONE_CONFIG_ID=$NAMESPACE/fprint_policy/print_file ./print_file 
+# try to overwrite - should fail
+SCONE_CONFIG_ID=$NAMESPACE/fprint_policy/fprint-arg-env ./fprint-arg-env new-arg1 new-arg2 new-arg3
+
+# move existing volumes out of the way
+mv /volume /vol-step1
+mkdir -p /volume
+
+# We can overwrite policy - to start from scratch
+export FPRINT_POLICY_PREDECESSOR=$(scone session create fprint_policy.yaml)

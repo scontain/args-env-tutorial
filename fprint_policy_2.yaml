@@ -1,0 +1,43 @@
+name: $NAMESPACE/fprint_policy
+version: "0.3.10"
+predecessor: $FPRINT_POLICY_PREDECESSOR
+
+security:
+    singleton_enclaves: true
+    attestation:
+      tolerate: ["debug-mode", "outdated-tcb", "insecure-configuration", "hyperthreading", "insecure-igpu", "software-hardening-needed", "aepic-leak"]
+      ignore_advisories: "*"
+      mode: hardware
+
+volumes:
+  - name: my_encrypted_volume_2
+
+images:
+  - name: my_image
+    volumes:
+      - name: my_encrypted_volume_2
+        path: /volume
+
+services:
+   - name: fprint-arg-env
+     image_name: my_image
+     command: ./fprint-arg-env start @@1 @@2 @@3 end
+     attestation:
+      - mrenclave:
+          - $FPRINT_MRENCLAVE
+     environment:
+        SCONE_MODE: hw
+        CONF_ACCESS_TOKEN: $$SCONE::access_token$$
+        \@\@HOSTNAME: # no value needed
+        \@\@SCONE_SERVICE_ACCESS_TOKEN: ignored # values are ignored
+        \@\@HOME:
+     pwd: /
+   - name: print-file
+     image_name: my_image
+     command: print-file
+     attestation:
+      - mrenclave:
+          - $PRINT_FILE_MRENCLAVE
+     environment:
+        SCONE_MODE: hw
+     pwd: /

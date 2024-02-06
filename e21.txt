@@ -1,0 +1,11 @@
+# 1- Start Ceremony Website
+
+docker run -it  -p 8008:8008 -p 8080:8080 -p 8088:8088 -p 8089:8089 -p 8090:8090 -p 8091:8091 -p 8092:8092  -p 8093:8093 -p 8094:8094 -p 8095:8095 -p 8097:8097 --rm  -v "$HOME/.kube:/root/.kube" registry.scontain.com/scone.cloud/ceremony-preparation:latest
+
+# 2- You can see the Kubernetes config
+# in the setting section - within K8s cluster no need for K8s config
+
+# 3- Look at status of the cluster ; we can see the latest
+# or the upgrade the report
+# https://localhost:8008/status_report?create=
+
