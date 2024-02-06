@@ -27,9 +27,7 @@ services:
           - $FPRINT_MRENCLAVE
      environment:
         SCONE_MODE: hw
-        CONF_ACCESS_TOKEN: $$SCONE::access_token$$
         \@\@HOSTNAME: # no value needed
-        \@\@SCONE_SERVICE_ACCESS_TOKEN: ignored # values are ignored
         \@\@HOME:
      pwd: /
    - name: print-file
