@@ -1,4 +1,8 @@
 
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # update session $SESSION
 export PREDECESSOR=$(scone session create --use-env  service_access_token_2.yaml)
 
@@ -20,3 +24,6 @@ export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$ACCESS_TOKEN_SESSION/print_
 # ok, now this should work again
 SCONE_CONFIG_ID=$SESSION/scone-print-arg-env ./scone-print-arg-env
 
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

@@ -1,0 +1,38 @@
+# In this exercise, we use a public CAS that is accessible for development.
+# This CAS has the name scone-cas.cf
+# We store this name in the environment variable SCONE_CAS_ADDR
+
+export SCONE_CAS_ADDR=scone-cas.cf
+
+# let us try to attest & verify this CAS instance
+
+scone cas attest $SCONE_CAS_ADDR 
+
+# The CAS instance runs in debug mode and the hardware &
+# firmware seems to have some issues.
+# We can use --help to see what we can do about this
+
+scone cas attest --help
+
+# let us attest & verify again but this time we tolerate all of the detected issues
+
+scone cas attest $SCONE_CAS_ADDR --only_for_testing-debug --only_for_testing-ignore-signer --only_for_testing-trust-any --accept-configuration-needed --accept-sw-hardening-needed --accept-group-out-of-date
+
+# In case we have multiple CAS instances, we can set a default instance that the 
+# CLI should use with the command scone cas set-default. 
+
+scone cas set-default $SCONE_CAS_ADDR
+
+# let us look at the list of trusted CAS instances.
+# The default CAS is marked with "*"
+# In this case, we have attested only one CAS instance.
+# Hence, the list contains exactly one entry.
+
+scone cas list
+
+# We store some content in environment variables like SCONE_CAS_ADDR
+# To be able to continue at a later point even if we disconnect from the
+# shell, we store all environment variables in a file last_env.sh
+# We need to add export and add "" around the values.
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

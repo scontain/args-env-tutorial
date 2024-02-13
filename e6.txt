@@ -1,3 +1,6 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
 
 # compile program:
 scone-gcc malicious-print-arg-env.c -g -O3 -o ./malicious-print-arg-env
@@ -22,3 +25,7 @@ read -p "Type OTP: " OTP
 
 # run malicious version - gets also access to the keys!!
 SCONE_CONFIG_ID=$NAMESPACE/host_arguments_policy/scone-print-arg-env@$OTP ./malicious-print-arg-env first last 1234567
+
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

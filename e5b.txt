@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # define host argument policy
 export HOST_ARGUMENTS_POLICY_PREDECESSOR="~"
 export HOST_ARGUMENTS_POLICY_PREDECESSOR=$(scone session create --use-env host_arguments_policy.yaml)
@@ -13,3 +17,6 @@ read -p "Type OTP: " OTP
 # Execute with host arguments
 SCONE_CONFIG_ID=$NAMESPACE/host_arguments_policy/scone-print-arg-env@$OTP ./scone-print-arg-env first last 1234567
 
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

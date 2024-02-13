@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # execute the following only if you do not have access to a K8s cluster
 
 source determine_sgx_device.sh
@@ -33,3 +37,7 @@ docker-compose up -d las
 
 docker-compose stop
 
+
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # run next steps in container in a Kubernetes cluster with a local
 # LAS and CAS already installed
 
@@ -71,3 +75,7 @@ read -p "Type OTP: " OTP
 # try again to retrieve the SERVICE_ACCESS_TOKEN
 export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$NAMESPACE/access_token_policy/print_access_token@${OTP} ./print-access-token)
 
+
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

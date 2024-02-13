@@ -1,17 +1,65 @@
+# First, we read the last environment values
+
+source last_env.sh
+
+# We create a new policy name for our history example
+
 export HISTORY_SESSION=history-example-$RANDOM-$RANDOM
 echo HISTORY_SESSION=$HISTORY_SESSION
+
+# Let us look at the first session
 cat history_example_1.yaml
+
+# We can substitute the environment variables using
+# envsubst. The scone CLI performs the same substitution
+# if the flag --use-env is set
+
 envsubst <history_example_1.yaml
+
+# Let us update this session
+# In case we need to update this session later, 
+# we need to know the session hash. We show later
+# how to compute the session hash. For now, we just
+# save the session hash in environment variable  HSESSION1.
 
 export HSESSION1=$(scone session create --use-env history_example_1.yaml)
+
+# Let us print the session hash
 echo Session hash of the first version of $HISTORY_SESSION is $HSESSION1
+
+# We can also print the session with all variables replaced:
 envsubst <history_example_1.yaml
 
+# We want to update this session and hence, we need to set the predecessor 
+# to the session hash of the first session. Let us show the second
+# session by instantiating all variables with the help of envsubst
+
 envsubst <history_example_2.yaml
+
+# Let us now update the session using scone session create.
+# Again, we stored the session hash in an environment variable.
+# This time in variable HSESSION2
+
 export HSESSION2=$(scone session create --use-env history_example_2.yaml)
+
+# Let us print the new session hash:
+
 echo Session hash of the second version of $HISTORY_SESSION is $HSESSION2
 
+# Let us update the session one more time.
+# We use file history_example_3.yaml. We output this 
+# file with envsubst
+
 envsubst <history_example_3.yaml
+
+# We update the session with scone session create
+
 export HSESSION3=$(scone session create --use-env history_example_3.yaml)
+
+# We print the session hash
+
 echo Session hash of the third version of $HISTORY_SESSION is $HSESSION3
 
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

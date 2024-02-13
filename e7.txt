@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # enable debug mode
 export ATTESTATION_POLICY_PREDECESSOR=$(scone session create --use-env attestation_policy_4.yaml)
 scone session read $NAMESPACE/attestation_policy
@@ -11,5 +15,6 @@ SCONE_CONFIG_ID=$NAMESPACE/attestation_policy/scone-print-arg-env@$OTP ./scone-p
 # Attestation succeeds
 
 
+# We store the current environment in file last_env.sh
 
-
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

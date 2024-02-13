@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # create access poliy
 export ACCESS_POLICY_PREDECESSOR="~"
 export ACCESS_POLICY_PREDECESSOR=$(scone session create --use-env access_policy.yaml)
@@ -9,3 +13,8 @@ echo The SESSION HASH of $NAMESPACE/access_policy is $ACCESS_TOKEN_POLICY_PREDEC
 scone session read $NAMESPACE/access_policy
 
 # we show in the next section on how to use the access_policy
+
+
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

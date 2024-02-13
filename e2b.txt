@@ -1,12 +1,20 @@
-#first check the flags for generating a session, i.e., a SCONE CAS policy
+# First, we make sure we continue with the same environment that was 
+# stored by the last task.
+
+source last_env.sh
+
+# Let us check the flags for generating a session, i.e., a SCONE CAS policy
+
 scone session create --help
 
 # create a random session name - to avoid conflicts with others
+
 export SESSION=secure-arguments-example-sim-mode-$RANDOM-$RANDOM
 echo Session name is $SESSION
 
 # show session
 cat session.yaml
+
 
 # The following fails since „variable $SESSION is not defined“ 
 scone session create session.yaml
@@ -18,3 +26,8 @@ echo Created Session $SESSION: The Session Hash is $PREDECESSOR
 
 # Note that creating this session a 2nd time will fail
 scone session create --use-env session.yaml
+
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh
+

@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # first version of OTP Policy
 export OTP_POLICY_PREDECESSOR="~"
 
@@ -14,3 +18,7 @@ scone session read $NAMESPACE/otp_policy
 unset SCONE_SERVICE_ACCESS_TOKEN
 SCONE_CONFIG_ID=$NAMESPACE/otp_policy/print-otp-secret ./scone-print-arg-env
 
+
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

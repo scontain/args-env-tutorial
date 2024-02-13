@@ -1,19 +1,59 @@
+# On your development machine, you can clone the
+# following public repo to work on several tasks:
+
 git clone https://github.com/scontain/args-env-tutorial.git
+
+# Let us enter the cloned repo:
 
 cd args-env-tutorial/
 
+# Let us compile the program using native compiler:
 gcc print-arg-env.c -g -O3 -o print-arg-env
+
+# We run the program and we can see in the output
+# the environment variables and the arguments that we
+# define on the command line.
 
 ENV2=World ENV1=! ./print-arg-env Hello
 
+# Next, we run this program in a container that contains the SCONE CLI.
+# Let us first check if we have access to the container image by
+# pulling the image as follows:
+
+docker pull registry.scontain.com/sconecuratedimages/crosscompilers
+
+# If the above docker pull fails, please check that you installed command
+# docker and you signed up for the community edition of SCONE. Please
+# sign up using the following link https://sconedocs.github.io/registry/
+
+# The SCONE CLI does not need access to a SGX device. In case your development
+# machine supports SGX, we map it in the container. Hence, we run the following
+# script to determine if you have access to SGX:
+
+cat determine_sgx_device.sh
+
+# Let us run the script to define environment variable MOUNT_SGXDEVICE
+
 source determine_sgx_device.sh
 
-docker run $MOUNT_SGXDEVICE -w=/work  --network=host --add-host=host.docker.internal:host-gateway --rm -it -v `pwd`:/work registry.scontain.com/sconecuratedimages/crosscompilers bash
+# Let us now start the container:
 
-# in the container compile the program:
-scone-gcc print-arg-env.c -g -O3 -o scone-print-arg-env
+docker run $MOUNT_SGXDEVICE -w=/work  --network=host --add-host=host.docker.internal:host-gateway --rm -it registry.scontain.com/sconecuratedimages/crosscompilers bash
 
-export MRENCLAVE=`SCONE_HASH=1 ./scone-print-arg-env`
-echo MRENCLAVE of scone-print-arg-env is $MRENCLAVE
+# Within the container, we install git, curl, and zsh.
+# Since the container is based on Alpine Linux, we use apk:
 
-ENV2=World ENV1=! ENV2="Args and Environment Variables are not protected" ./scone-print-arg-env Hello
+apk add git curl zsh
+
+# On your development machine, you can clone the
+# following public repo to work on several tasks:
+
+git clone https://github.com/scontain/args-env-tutorial.git
+
+# Let us enter the cloned repo:
+
+cd args-env-tutorial/
+
+# Execute the next tasks within this container
+
+

@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # create signer key
 
 # we need openssl
@@ -20,3 +24,8 @@ scone-signer info --yaml scone-print-arg-env
 
 # extract MrSigner:
 export MRSIGNER=
+
+
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

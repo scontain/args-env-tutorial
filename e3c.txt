@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # compile code as confidential program
 scone-gcc print-access-token.c  -o print-access-token
 
@@ -15,3 +19,6 @@ export SCONE_SERVICE_ACCESS_TOKEN=$(SCONE_CONFIG_ID=$ACCESS_TOKEN_SESSION/print_
 # print the SCONE_SERVICE_ACCESS_TOKEN
 echo SCONE_SERVICE_ACCESS_TOKEN=$SCONE_SERVICE_ACCESS_TOKEN
 
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh

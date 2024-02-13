@@ -1,3 +1,7 @@
+# First, we read the last environment values like SESSION
+
+source last_env.sh
+
 # define nested namespace
 export NESTED_NAMESPACE_PREDECESSOR="~"                                                              
 export NESTED_NAMESPACE_PREDECESSOR=$(scone session create --use-env nested_namespace.yaml)
@@ -11,3 +15,7 @@ read -p "Type OTP: " OTP
 # print access token
 SCONE_CONFIG_ID=$NAMESPACE/nested-namespace/access_token_policy/print_access_token@${OTP} ./print-access-token
 
+
+# We store the current environment in file last_env.sh
+
+env -u PS1 |  awk -e '{ print "export \""$0"\"" }' | > last_env.sh
